@@ -1,0 +1,87 @@
+run:
+  timeout: 5m
+  tests: true
+  modules-download-mode: readonly
+
+linters:
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - gofmt
+    - goimports
+    - misspell
+    - unconvert
+    - unparam
+    - gocritic
+    - gosec
+    - prealloc
+    - revive
+  
+  disable:
+    - deadcode
+    - varcheck
+    - structcheck
+
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+  
+  govet:
+    check-shadowing: false
+  
+  gofmt:
+    simplify: true
+  
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - performance
+      - style
+    disabled-checks:
+      - unnamedResult
+      - hugeParam
+  
+  gosec:
+    excludes:
+      - G402  # TLS MinVersion - 我们需要控制 TLS 版本
+      - G404  # Weak random - 我们使用 GREASE
+  
+  misspell:
+    locale: US
+  
+  revive:
+    confidence: 0.8
+
+issues:
+  exclude-rules:
+    # 排除测试文件的某些检查
+    - path: _test\.go
+      linters:
+        - errcheck
+        - gosec
+    
+    # 排除生成的文件
+    - path: h2_bundle\.go
+      linters:
+        - all
+    
+    # 排除 internal 包的某些检查
+    - path: internal/
+      linters:
+        - revive
+  
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+  uniq-by-line: true
+  sort-results: true
+
