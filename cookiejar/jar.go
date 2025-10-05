@@ -15,7 +15,7 @@ import (
 	"strings"
 	"sync"
 	"time"
-	
+
 	http "github.com/vanling1111/tlshttp"
 	"github.com/vanling1111/tlshttp/internal/ascii"
 )

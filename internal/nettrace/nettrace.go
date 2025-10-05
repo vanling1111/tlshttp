@@ -1,4 +1,4 @@
-﻿// Copyright 2016 The Go Authors. All rights reserved.
+// Copyright 2016 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -16,7 +16,8 @@ type TraceKey struct{}
 // specify an alternate resolver func.
 // It is not exposed to outsider users. (But see issue 12503)
 // The value should be the same type as lookupIP:
-//     func lookupIP(ctx context.Context, host string) ([]IPAddr, error)
+//
+//	func lookupIP(ctx context.Context, host string) ([]IPAddr, error)
 type LookupIPAltResolverKey struct{}
 
 // Trace contains a set of hooks for tracing events within

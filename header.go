@@ -1,18 +1,19 @@
-﻿// Copyright 2010 The Go Authors. All rights reserved.
+// Copyright 2010 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 package http
 
 import (
-	"github.com/vanling1111/tlshttp/httptrace"
-	"github.com/vanling1111/tlshttp/internal/ascii"
 	"io"
 	"net/textproto"
 	"sort"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/vanling1111/tlshttp/httptrace"
+	"github.com/vanling1111/tlshttp/internal/ascii"
 
 	"golang.org/x/net/http/httpguts"
 )

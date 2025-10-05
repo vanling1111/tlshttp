@@ -1,4 +1,4 @@
-﻿// Copyright 2009 The Go Authors. All rights reserved.
+// Copyright 2009 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -15,11 +15,12 @@ package http
 // Do not modify this file, it should remain frozen.
 
 import (
-	"github.com/vanling1111/tlshttp/internal/godebug"
 	"net/url"
 	"sort"
 	"strings"
 	"sync"
+
+	"github.com/vanling1111/tlshttp/internal/godebug"
 )
 
 var httpmuxgo121 = godebug.New("httpmuxgo121")

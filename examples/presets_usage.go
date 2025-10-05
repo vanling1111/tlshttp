@@ -8,7 +8,7 @@ package main
 import (
 	"fmt"
 	"io"
-	
+
 	http "github.com/vanling1111/tlshttp"
 	"github.com/vanling1111/tlshttp/presets"
 )
@@ -16,22 +16,22 @@ import (
 func main() {
 	fmt.Println("========== 示例 1: 使用 Chrome 120 指纹 ==========")
 	exampleChrome120()
-	
+
 	fmt.Println("\n========== 示例 2: 使用 Firefox 120 指纹 ==========")
 	exampleFirefox120()
-	
+
 	fmt.Println("\n========== 示例 3: 使用 Safari iOS 指纹 ==========")
 	exampleSafariIOS()
-	
+
 	fmt.Println("\n========== 示例 4: 通过名称获取预设 ==========")
 	exampleGetPreset()
-	
+
 	fmt.Println("\n========== 示例 5: 应用到现有 Transport ==========")
 	exampleApplyToTransport()
-	
+
 	fmt.Println("\n========== 示例 6: 组合使用预设和自定义配置 ==========")
 	exampleCombineWithCustomConfig()
-	
+
 	fmt.Println("\n========== 示例 7: 遍历所有预设 ==========")
 	exampleListAllPresets()
 }
@@ -40,10 +40,10 @@ func main() {
 func exampleChrome120() {
 	// 创建使用 Chrome 120 指纹的 Transport
 	transport := presets.Chrome120Windows.NewTransport()
-	
+
 	// 创建 HTTP 客户端
 	client := &http.Client{Transport: transport}
-	
+
 	// 发起请求
 	resp, err := client.Get("https://tls.peet.ws/api/all")
 	if err != nil {
@@ -51,7 +51,7 @@ func exampleChrome120() {
 		return
 	}
 	defer resp.Body.Close()
-	
+
 	body, _ := io.ReadAll(resp.Body)
 	fmt.Printf("Status: %s\n", resp.Status)
 	fmt.Printf("Protocol: %s\n", resp.Proto)
@@ -62,10 +62,10 @@ func exampleChrome120() {
 func exampleFirefox120() {
 	// 创建使用 Firefox 120 指纹的 Transport
 	transport := presets.Firefox120Windows.NewTransport()
-	
+
 	// 创建 HTTP 客户端
 	client := &http.Client{Transport: transport}
-	
+
 	// 发起请求
 	resp, err := client.Get("https://tls.peet.ws/api/all")
 	if err != nil {
@@ -73,7 +73,7 @@ func exampleFirefox120() {
 		return
 	}
 	defer resp.Body.Close()
-	
+
 	fmt.Printf("Status: %s\n", resp.Status)
 	fmt.Printf("Protocol: %s\n", resp.Proto)
 }
@@ -82,10 +82,10 @@ func exampleFirefox120() {
 func exampleSafariIOS() {
 	// 创建使用 Safari iOS 17 指纹的 Transport
 	transport := presets.SafariiOS17.NewTransport()
-	
+
 	// 创建 HTTP 客户端
 	client := &http.Client{Transport: transport}
-	
+
 	// 发起请求
 	resp, err := client.Get("https://tls.peet.ws/api/all")
 	if err != nil {
@@ -93,7 +93,7 @@ func exampleSafariIOS() {
 		return
 	}
 	defer resp.Body.Close()
-	
+
 	fmt.Printf("Status: %s\n", resp.Status)
 	fmt.Printf("Protocol: %s\n", resp.Proto)
 }
@@ -106,16 +106,16 @@ func exampleGetPreset() {
 		fmt.Println("Preset not found")
 		return
 	}
-	
+
 	// 打印指纹信息
 	fmt.Printf("Name: %s\n", preset.Name)
 	fmt.Printf("JA3: %s...\n", preset.JA3[:50])
 	fmt.Printf("User-Agent: %s...\n", preset.UserAgent[:50])
-	
+
 	// 创建 Transport
 	transport := preset.NewTransport()
 	client := &http.Client{Transport: transport}
-	
+
 	// 发起请求
 	resp, err := client.Get("https://tls.peet.ws/api/all")
 	if err != nil {
@@ -123,7 +123,7 @@ func exampleGetPreset() {
 		return
 	}
 	defer resp.Body.Close()
-	
+
 	fmt.Printf("Status: %s\n", resp.Status)
 }
 
@@ -134,13 +134,13 @@ func exampleApplyToTransport() {
 		MaxIdleConns:        100,
 		MaxIdleConnsPerHost: 10,
 	}
-	
+
 	// 应用 Edge 120 的指纹
 	presets.Edge120Windows.ApplyToTransport(transport)
-	
+
 	// 创建 HTTP 客户端
 	client := &http.Client{Transport: transport}
-	
+
 	// 发起请求
 	resp, err := client.Get("https://tls.peet.ws/api/all")
 	if err != nil {
@@ -148,7 +148,7 @@ func exampleApplyToTransport() {
 		return
 	}
 	defer resp.Body.Close()
-	
+
 	fmt.Printf("Status: %s\n", resp.Status)
 	fmt.Printf("Max Idle Conns: %d\n", transport.MaxIdleConns)
 }
@@ -157,16 +157,16 @@ func exampleApplyToTransport() {
 func exampleCombineWithCustomConfig() {
 	// 使用 Chrome 120 的指纹
 	transport := presets.Chrome120Windows.NewTransport()
-	
+
 	// 添加自定义配置
-	transport.RandomJA3 = true              // 启用 JA3 随机化
-	transport.ForceHTTP1 = false            // 允许 HTTP/2
-	transport.MaxIdleConns = 100            // 设置最大空闲连接数
-	transport.MaxIdleConnsPerHost = 10      // 设置每个主机的最大空闲连接数
-	
+	transport.RandomJA3 = true         // 启用 JA3 随机化
+	transport.ForceHTTP1 = false       // 允许 HTTP/2
+	transport.MaxIdleConns = 100       // 设置最大空闲连接数
+	transport.MaxIdleConnsPerHost = 10 // 设置每个主机的最大空闲连接数
+
 	// 创建 HTTP 客户端
 	client := &http.Client{Transport: transport}
-	
+
 	// 发起请求
 	resp, err := client.Get("https://tls.peet.ws/api/all")
 	if err != nil {
@@ -174,7 +174,7 @@ func exampleCombineWithCustomConfig() {
 		return
 	}
 	defer resp.Body.Close()
-	
+
 	fmt.Printf("Status: %s\n", resp.Status)
 	fmt.Printf("Protocol: %s\n", resp.Proto)
 	fmt.Printf("Random JA3: %v\n", transport.RandomJA3)
@@ -190,4 +190,3 @@ func exampleListAllPresets() {
 		fmt.Println()
 	}
 }
-

@@ -7,8 +7,8 @@ package presets_test
 import (
 	"fmt"
 	"io"
-	
-	"github.com/vanling1111/tlshttp"
+
+	http "github.com/vanling1111/tlshttp"
 	"github.com/vanling1111/tlshttp/presets"
 )
 
@@ -16,10 +16,10 @@ import (
 func ExampleBrowserFingerprint_NewTransport() {
 	// 创建一个使用 Chrome 120 指纹的 Transport
 	transport := presets.Chrome120Windows.NewTransport()
-	
+
 	// 创建 HTTP 客户端
 	client := &http.Client{Transport: transport}
-	
+
 	// 发起请求
 	resp, err := client.Get("https://example.com")
 	if err != nil {
@@ -27,7 +27,7 @@ func ExampleBrowserFingerprint_NewTransport() {
 		return
 	}
 	defer resp.Body.Close()
-	
+
 	fmt.Println("Status:", resp.Status)
 }
 
@@ -38,13 +38,13 @@ func ExampleBrowserFingerprint_ApplyToTransport() {
 		MaxIdleConns:        100,
 		MaxIdleConnsPerHost: 10,
 	}
-	
+
 	// 应用 Firefox 120 的指纹
 	presets.Firefox120Windows.ApplyToTransport(transport)
-	
+
 	// 创建 HTTP 客户端
 	client := &http.Client{Transport: transport}
-	
+
 	// 发起请求
 	resp, err := client.Get("https://example.com")
 	if err != nil {
@@ -52,7 +52,7 @@ func ExampleBrowserFingerprint_ApplyToTransport() {
 		return
 	}
 	defer resp.Body.Close()
-	
+
 	body, _ := io.ReadAll(resp.Body)
 	fmt.Println("Body length:", len(body))
 }
@@ -65,23 +65,23 @@ func ExampleGetPreset() {
 		fmt.Println("Preset not found")
 		return
 	}
-	
+
 	// 打印指纹信息
 	fmt.Println("Name:", preset.Name)
 	fmt.Println("JA3:", preset.JA3[:50]+"...") // 只打印前50个字符
 	fmt.Println("User-Agent:", preset.UserAgent[:50]+"...")
-	
+
 	// 创建 Transport
 	transport := preset.NewTransport()
 	client := &http.Client{Transport: transport}
-	
+
 	resp, err := client.Get("https://example.com")
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
 	defer resp.Body.Close()
-	
+
 	fmt.Println("Status:", resp.StatusCode)
 }
 
@@ -89,10 +89,10 @@ func ExampleGetPreset() {
 func Example_safariIOS() {
 	// 使用 Safari iOS 17 的指纹
 	transport := presets.SafariiOS17.NewTransport()
-	
+
 	// 创建 HTTP 客户端
 	client := &http.Client{Transport: transport}
-	
+
 	// 发起请求
 	resp, err := client.Get("https://example.com")
 	if err != nil {
@@ -100,7 +100,7 @@ func Example_safariIOS() {
 		return
 	}
 	defer resp.Body.Close()
-	
+
 	fmt.Println("Status:", resp.Status)
 	fmt.Println("Protocol:", resp.Proto)
 }
@@ -117,13 +117,13 @@ func ExampleAllPresets() {
 func Example_edgeWindows() {
 	// 使用 Edge 120 的指纹
 	transport := presets.Edge120Windows.NewTransport()
-	
+
 	// 添加额外的配置
 	transport.RandomJA3 = true // 启用 JA3 随机化
-	
+
 	// 创建 HTTP 客户端
 	client := &http.Client{Transport: transport}
-	
+
 	// 发起请求
 	resp, err := client.Get("https://example.com")
 	if err != nil {
@@ -131,7 +131,7 @@ func Example_edgeWindows() {
 		return
 	}
 	defer resp.Body.Close()
-	
+
 	fmt.Println("Status:", resp.Status)
 }
 
@@ -139,16 +139,16 @@ func Example_edgeWindows() {
 func Example_combinedConfig() {
 	// 使用 Chrome 120 的指纹
 	transport := presets.Chrome120Windows.NewTransport()
-	
+
 	// 添加自定义配置
-	transport.RandomJA3 = true              // 启用 JA3 随机化
-	transport.ForceHTTP1 = false            // 允许 HTTP/2
-	transport.MaxIdleConns = 100            // 设置最大空闲连接数
-	transport.MaxIdleConnsPerHost = 10      // 设置每个主机的最大空闲连接数
-	
+	transport.RandomJA3 = true         // 启用 JA3 随机化
+	transport.ForceHTTP1 = false       // 允许 HTTP/2
+	transport.MaxIdleConns = 100       // 设置最大空闲连接数
+	transport.MaxIdleConnsPerHost = 10 // 设置每个主机的最大空闲连接数
+
 	// 创建 HTTP 客户端
 	client := &http.Client{Transport: transport}
-	
+
 	// 发起请求
 	resp, err := client.Get("https://example.com")
 	if err != nil {
@@ -156,8 +156,7 @@ func Example_combinedConfig() {
 		return
 	}
 	defer resp.Body.Close()
-	
+
 	fmt.Println("Status:", resp.Status)
 	fmt.Println("Protocol:", resp.Proto)
 }
-

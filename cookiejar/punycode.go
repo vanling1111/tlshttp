@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"strings"
 	"unicode/utf8"
-	
+
 	"github.com/vanling1111/tlshttp/internal/ascii"
 )
 

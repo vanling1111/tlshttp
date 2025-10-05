@@ -12,15 +12,15 @@
 package presets
 
 import (
-	"github.com/vanling1111/tlshttp"
+	http "github.com/vanling1111/tlshttp"
 )
 
 // BrowserFingerprint 浏览器指纹配置
 type BrowserFingerprint struct {
-	Name       string                 // 浏览器名称
-	JA3        string                 // JA3 指纹字符串
-	UserAgent  string                 // User-Agent 字符串
-	HTTP2      *http.HTTP2Settings    // HTTP/2 设置
+	Name      string              // 浏览器名称
+	JA3       string              // JA3 指纹字符串
+	UserAgent string              // User-Agent 字符串
+	HTTP2     *http.HTTP2Settings // HTTP/2 设置
 }
 
 // ===== Chrome 浏览器指纹 =====
@@ -161,12 +161,12 @@ var Edge120Windows = BrowserFingerprint{
 
 // AllPresets 包含所有预设的浏览器指纹
 var AllPresets = map[string]*BrowserFingerprint{
-	"chrome120":   &Chrome120Windows,
-	"chrome117":   &Chrome117Windows,
-	"chrome133":   &Chrome133Windows,
-	"firefox120":  &Firefox120Windows,
+	"chrome120":    &Chrome120Windows,
+	"chrome117":    &Chrome117Windows,
+	"chrome133":    &Chrome133Windows,
+	"firefox120":   &Firefox120Windows,
 	"safari_ios17": &SafariiOS17,
-	"edge120":     &Edge120Windows,
+	"edge120":      &Edge120Windows,
 }
 
 // GetPreset 根据名称获取预设指纹
@@ -183,10 +183,10 @@ func (bf *BrowserFingerprint) ApplyToTransport(transport *http.Transport) {
 	if transport == nil {
 		return
 	}
-	
+
 	transport.JA3 = bf.JA3
 	transport.UserAgent = bf.UserAgent
-	
+
 	if bf.HTTP2 != nil {
 		// 深度克隆 HTTP2Settings
 		clonedHTTP2, err := bf.HTTP2.Clone()
@@ -202,7 +202,7 @@ func (bf *BrowserFingerprint) NewTransport() *http.Transport {
 		JA3:       bf.JA3,
 		UserAgent: bf.UserAgent,
 	}
-	
+
 	if bf.HTTP2 != nil {
 		// 深度克隆 HTTP2Settings
 		clonedHTTP2, err := bf.HTTP2.Clone()
@@ -210,7 +210,6 @@ func (bf *BrowserFingerprint) NewTransport() *http.Transport {
 			transport.HTTP2Settings = clonedHTTP2
 		}
 	}
-	
+
 	return transport
 }
-

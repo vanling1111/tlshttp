@@ -23,7 +23,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
-	
+
 	tls "github.com/refraction-networking/utls"
 	"github.com/vanling1111/tlshttp/internal/ascii"
 )

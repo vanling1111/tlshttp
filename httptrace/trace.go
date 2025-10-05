@@ -1,4 +1,4 @@
-﻿// Copyright 2016 The Go Authors. All rights reserved.
+// Copyright 2016 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -8,12 +8,13 @@ package httptrace
 
 import (
 	"context"
-	tls "github.com/refraction-networking/utls"
-	"github.com/vanling1111/tlshttp/internal/nettrace"
 	"net"
 	"net/textproto"
 	"reflect"
 	"time"
+
+	tls "github.com/refraction-networking/utls"
+	"github.com/vanling1111/tlshttp/internal/nettrace"
 )
 
 // unique type to prevent assignment.

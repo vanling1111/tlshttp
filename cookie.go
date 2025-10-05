@@ -1,4 +1,4 @@
-﻿// Copyright 2009 The Go Authors. All rights reserved.
+// Copyright 2009 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -7,13 +7,14 @@ package http
 import (
 	"errors"
 	"fmt"
-	"github.com/vanling1111/tlshttp/internal/ascii"
 	"log"
 	"net"
 	"net/textproto"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/vanling1111/tlshttp/internal/ascii"
 )
 
 // A Cookie represents an HTTP cookie as sent in the Set-Cookie header of an

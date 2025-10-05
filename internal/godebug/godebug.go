@@ -1,4 +1,4 @@
-﻿// Copyright 2021 The Go Authors. All rights reserved.
+// Copyright 2021 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -49,12 +49,13 @@ package godebug
 // meaning it cannot introduce a GODEBUG setting of its own.
 // We keep imports to the absolute bare minimum.
 import (
-	"github.com/vanling1111/tlshttp/internal/bisect"
-	"github.com/vanling1111/tlshttp/internal/godebugs"
 	"sync"
 	"sync/atomic"
 	"unsafe"
 	_ "unsafe" // go:linkname
+
+	"github.com/vanling1111/tlshttp/internal/bisect"
+	"github.com/vanling1111/tlshttp/internal/godebugs"
 )
 
 // A Setting is a single setting in the $GODEBUG environment variable.

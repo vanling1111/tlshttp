@@ -6,7 +6,7 @@ package http
 
 import (
 	"testing"
-	
+
 	tls "github.com/refraction-networking/utls"
 )
 
@@ -62,9 +62,9 @@ func TestTLSExtensionsConfigCloneNil(t *testing.T) {
 // TestTLSFingerprintConfigClone 测试 TLSFingerprintConfig 的深度克隆
 func TestTLSFingerprintConfigClone(t *testing.T) {
 	original := &TLSFingerprintConfig{
-		JA3:              "771,4865-4866-4867,0-23-65281,29-23-24,0",
-		UserAgent:        "TestUA",
-		ForceHTTP1:       true,
+		JA3:               "771,4865-4866-4867,0-23-65281,29-23-24,0",
+		UserAgent:         "TestUA",
+		ForceHTTP1:        true,
 		PresetFingerprint: "chrome120",
 		CustomExtensions: &TLSExtensionsConfig{
 			NotUsedGREASE: false,
@@ -670,9 +670,9 @@ func TestTransportEnsureInitialized(t *testing.T) {
 // TestTransportCustomTLSDetection 测试自定义 TLS 检测逻辑
 func TestTransportCustomTLSDetection(t *testing.T) {
 	tests := []struct {
-		name     string
-		tr       *Transport
-		wantUse  bool
+		name    string
+		tr      *Transport
+		wantUse bool
 	}{
 		{
 			name: "UseCustomTLS 设置",
@@ -705,8 +705,8 @@ func TestTransportCustomTLSDetection(t *testing.T) {
 			wantUse: true,
 		},
 		{
-			name: "无自定义 TLS",
-			tr: &Transport{},
+			name:    "无自定义 TLS",
+			tr:      &Transport{},
 			wantUse: false,
 		},
 	}
@@ -715,8 +715,8 @@ func TestTransportCustomTLSDetection(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// 这个测试验证自定义 TLS 的检测逻辑
 			// 实际的检测逻辑在 addTLS 方法中：
-			// useCustomTLS := pconn.t.UseCustomTLS || 
-			//     pconn.t.JA3 != "" || 
+			// useCustomTLS := pconn.t.UseCustomTLS ||
+			//     pconn.t.JA3 != "" ||
 			//     pconn.t.ClientHelloHexStream != "" ||
 			//     pconn.t.TLSFingerprint != nil
 
@@ -783,4 +783,3 @@ func BenchmarkGetCompleteExtensionMap(b *testing.B) {
 		_ = getCompleteExtensionMap()
 	}
 }
-

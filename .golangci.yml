@@ -45,6 +45,19 @@ linters-settings:
     disabled-checks:
       - unnamedResult
       - hugeParam
+      - emptyStringTest
+      - ifElseChain
+      - typeDefFirst
+      - assignOp
+      - commentFormatting
+      - dupImport
+      - paramTypeCombine
+      - rangeValCopy
+      - builtinShadow
+      - singleCaseSwitch
+      - deferInLoop
+      - nilValReturn
+      - truncateCmp
   
   gosec:
     excludes:

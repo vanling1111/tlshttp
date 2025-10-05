@@ -1,4 +1,4 @@
-﻿// Copyright 2009 The Go Authors. All rights reserved.
+// Copyright 2009 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -9,7 +9,6 @@ package http
 import (
 	"errors"
 	"fmt"
-	"github.com/vanling1111/tlshttp/internal/godebug"
 	"io"
 	"io/fs"
 	"mime"
@@ -23,6 +22,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/vanling1111/tlshttp/internal/godebug"
 )
 
 // A Dir implements [FileSystem] using the native file system restricted to a

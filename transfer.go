@@ -1,4 +1,4 @@
-﻿// Copyright 2009 The Go Authors. All rights reserved.
+// Copyright 2009 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -9,10 +9,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/vanling1111/tlshttp/httptrace"
-	"github.com/vanling1111/tlshttp/internal"
-	"github.com/vanling1111/tlshttp/internal/ascii"
-	"github.com/vanling1111/tlshttp/internal/godebug"
 	"io"
 	"net/textproto"
 	"reflect"
@@ -21,6 +17,11 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/vanling1111/tlshttp/httptrace"
+	"github.com/vanling1111/tlshttp/internal"
+	"github.com/vanling1111/tlshttp/internal/ascii"
+	"github.com/vanling1111/tlshttp/internal/godebug"
 
 	"golang.org/x/net/http/httpguts"
 )

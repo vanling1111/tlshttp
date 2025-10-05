@@ -54,7 +54,7 @@ import (
 	// 我们原创的 TLS 指纹控制依赖
 	"github.com/fxamacker/cbor"
 	tls "github.com/refraction-networking/utls"
-	
+
 	"github.com/vanling1111/tlshttp/httptrace"
 	"github.com/vanling1111/tlshttp/internal/ascii"
 	"github.com/vanling1111/tlshttp/internal/godebug"
@@ -101,7 +101,7 @@ type TLSExtensionsConfig struct {
 	PSKKeyExchangeModes          *tls.PSKKeyExchangeModesExtension
 	SignatureAlgorithmsCert      *tls.SignatureAlgorithmsCertExtension
 	KeyShareCurves               *tls.KeyShareExtension
-	
+
 	// 高级配置
 	NotUsedGREASE        bool   // 是否不使用 GREASE
 	ClientHelloHexStream string // 十六进制 ClientHello 流
@@ -110,7 +110,7 @@ type TLSExtensionsConfig struct {
 // HTTP2Config 配置 HTTP/2 连接（Go 1.25 新特性）
 // 注意：这是 Go 1.25 新增的类型，目前在 Go 标准库中也还未完全实现
 // 根据 Go issue #67813，此功能仍在开发中
-// 
+//
 // 如果需要配置 HTTP/2，建议使用：
 // - Transport.HTTP2Settings 字段（我们的扩展）
 // - 或直接使用 Transport.H2Transport
@@ -176,7 +176,7 @@ func unencryptedTLSConn(c net.Conn) *tls.Conn {
 	// 1. 需要创建假的 TLS 连接，与 utls 类型系统不兼容
 	// 2. h2c 在生产环境中几乎不使用（HTTP/2 通常要求 TLS）
 	// 3. Go 1.25 的 h2c 支持还在完善中
-	// 
+	//
 	// 如果确实需要 h2c，可以：
 	// - 使用 golang.org/x/net/http2.Server 和 h2c.NewHandler
 	// - 或使用标准 net/http 包的 HTTP/2 配置
@@ -217,27 +217,27 @@ func (t *Transport) ensureInitialized() {
 	if t.idleConn == nil {
 		t.idleConn = make(map[connectMethodKey][]*persistConn)
 	}
-	
+
 	// 确保 idleConnWait map 已初始化
 	if t.idleConnWait == nil {
 		t.idleConnWait = make(map[connectMethodKey]wantConnQueue)
 	}
-	
+
 	// 确保 reqCanceler map 已初始化
 	if t.reqCanceler == nil {
 		t.reqCanceler = make(map[*Request]context.CancelCauseFunc)
 	}
-	
+
 	// 确保 connsPerHost map 已初始化
 	if t.connsPerHost == nil {
 		t.connsPerHost = make(map[connectMethodKey]int)
 	}
-	
+
 	// 确保 connsPerHostWait map 已初始化
 	if t.connsPerHostWait == nil {
 		t.connsPerHostWait = make(map[connectMethodKey]wantConnQueue)
 	}
-	
+
 	// 确保 ALPNProtocols slice 已初始化
 	if t.ALPNProtocols == nil {
 		t.ALPNProtocols = make([]string, 0)
@@ -498,32 +498,32 @@ type Transport struct {
 
 	// ===== TLS 指纹控制字段 =====
 	// 简洁 API - 易于使用
-	
+
 	// 基础配置 - 一行代码启用自定义 TLS
-	JA3                string  // JA3 字符串，设置后自动启用自定义 TLS
-	RandomJA3          bool    // 随机化 JA3 指纹
-	UserAgent          string  // 用户代理字符串，用于浏览器类型识别
-	ForceHTTP1         bool    // 强制使用 HTTP/1.1，禁用 HTTP/2
-	TLSExtensions      *TLSExtensionsConfig // TLS 扩展配置
-	ClientHelloHexStream string // 十六进制 ClientHello 流
-	
+	JA3                  string               // JA3 字符串，设置后自动启用自定义 TLS
+	RandomJA3            bool                 // 随机化 JA3 指纹
+	UserAgent            string               // 用户代理字符串，用于浏览器类型识别
+	ForceHTTP1           bool                 // 强制使用 HTTP/1.1，禁用 HTTP/2
+	TLSExtensions        *TLSExtensionsConfig // TLS 扩展配置
+	ClientHelloHexStream string               // 十六进制 ClientHello 流
+
 	// ALPN 协议自定义控制
-	ALPNProtocols      []string // 自定义 ALPN 协议列表，如 ["h2", "http/1.1"]
-	CustomALPN         bool     // 是否使用自定义 ALPN 协议
-	
+	ALPNProtocols []string // 自定义 ALPN 协议列表，如 ["h2", "http/1.1"]
+	CustomALPN    bool     // 是否使用自定义 ALPN 协议
+
 	// JA4+ 指纹控制框架
-	JA4L               string   // JA4L (距离/位置) 指纹控制
-	JA4X               string   // JA4X (X509 证书) 指纹控制
-	CustomJA4          bool     // 是否使用自定义 JA4 指纹
-	
+	JA4L      string // JA4L (距离/位置) 指纹控制
+	JA4X      string // JA4X (X509 证书) 指纹控制
+	CustomJA4 bool   // 是否使用自定义 JA4 指纹
+
 	// HTTP/2 设置完整控制
-	HTTP2Settings      *HTTP2Settings // HTTP/2 设置控制
+	HTTP2Settings *HTTP2Settings // HTTP/2 设置控制
 	// 注意：H2Transport 字段已在第396行定义（h2Transport 类型）
-	
+
 	// 高级配置（可选）
-	TLSFingerprint *TLSFingerprintConfig // 完整配置，用于高级用户
-	UseCustomTLS   bool                  // 手动启用自定义 TLS
-	RandomizeFingerprint bool            // 手动启用指纹随机化
+	TLSFingerprint       *TLSFingerprintConfig // 完整配置，用于高级用户
+	UseCustomTLS         bool                  // 手动启用自定义 TLS
+	RandomizeFingerprint bool                  // 手动启用指纹随机化
 }
 
 func (t *Transport) writeBufferSize() int {
@@ -587,7 +587,7 @@ func (t *Transport) Clone() *Transport {
 		}
 		t2.TLSNextProto = npm
 	}
-	
+
 	// ===== 复制 TLS 指纹控制字段 =====
 	t2.JA3 = t.JA3
 	t2.RandomJA3 = t.RandomJA3
@@ -596,17 +596,17 @@ func (t *Transport) Clone() *Transport {
 	t2.ClientHelloHexStream = t.ClientHelloHexStream
 	t2.UseCustomTLS = t.UseCustomTLS
 	t2.RandomizeFingerprint = t.RandomizeFingerprint
-	
+
 	// 复制 ALPN 控制字段
 	t2.ALPNProtocols = make([]string, len(t.ALPNProtocols))
 	copy(t2.ALPNProtocols, t.ALPNProtocols)
 	t2.CustomALPN = t.CustomALPN
-	
+
 	// 复制 JA4+ 控制字段
 	t2.JA4L = t.JA4L
 	t2.JA4X = t.JA4X
 	t2.CustomJA4 = t.CustomJA4
-	
+
 	// 深度克隆 HTTP2Settings
 	if t.HTTP2Settings != nil {
 		clonedHTTP2Settings, err := t.HTTP2Settings.Clone()
@@ -616,10 +616,10 @@ func (t *Transport) Clone() *Transport {
 			t2.HTTP2Settings = nil // 如果克隆失败，设置为 nil
 		}
 	}
-	
+
 	// 复制 H2Transport 字段
 	t2.H2Transport = t.H2Transport
-	
+
 	// 深度克隆 TLSExtensions
 	if t.TLSExtensions != nil {
 		clonedExt, err := t.TLSExtensions.Clone()
@@ -629,7 +629,7 @@ func (t *Transport) Clone() *Transport {
 			t2.TLSExtensions = nil // 如果克隆失败，设置为 nil
 		}
 	}
-	
+
 	// 深度克隆 TLSFingerprint
 	if t.TLSFingerprint != nil {
 		t2.TLSFingerprint = &TLSFingerprintConfig{
@@ -639,7 +639,7 @@ func (t *Transport) Clone() *Transport {
 			ClientHelloHexStream: t.TLSFingerprint.ClientHelloHexStream,
 			PresetFingerprint:    t.TLSFingerprint.PresetFingerprint,
 		}
-		
+
 		// 深度克隆 CustomExtensions
 		if t.TLSFingerprint.CustomExtensions != nil {
 			clonedCustomExt, err := t.TLSFingerprint.CustomExtensions.Clone()
@@ -650,7 +650,7 @@ func (t *Transport) Clone() *Transport {
 			}
 		}
 	}
-	
+
 	return t2
 }
 
@@ -681,7 +681,7 @@ func adjustNextProtos(nextProtos []string, protocols Protocols) []string {
 	if len(nextProtos) == 0 {
 		return nextProtos
 	}
-	
+
 	// 如果不支持 HTTP/1，移除 "http/1.1"
 	if !protocols.HTTP1() {
 		result := make([]string, 0, len(nextProtos))
@@ -692,7 +692,7 @@ func adjustNextProtos(nextProtos []string, protocols Protocols) []string {
 		}
 		return result
 	}
-	
+
 	// 如果不支持 HTTP/2，移除 "h2"
 	if !protocols.HTTP2() {
 		result := make([]string, 0, len(nextProtos))
@@ -703,7 +703,7 @@ func adjustNextProtos(nextProtos []string, protocols Protocols) []string {
 		}
 		return result
 	}
-	
+
 	return nextProtos
 }
 
@@ -903,7 +903,7 @@ func validateHeaders(hdrs Header) string {
 func (t *Transport) roundTrip(req *Request) (_ *Response, err error) {
 	// 修复内存泄漏和并发问题：确保所有 map 都已初始化
 	t.ensureInitialized()
-	
+
 	t.nextProtoOnce.Do(t.onceSetNextProtoDefaults)
 	ctx := req.Context()
 	trace := httptrace.ContextClientTrace(ctx)
@@ -1899,7 +1899,7 @@ func (t *Transport) queueForDial(w *wantConn) {
 	if t.connsPerHost == nil {
 		t.connsPerHost = make(map[connectMethodKey]int)
 	}
-	
+
 	if n := t.connsPerHost[w.key]; n < t.MaxConnsPerHost {
 		t.connsPerHost[w.key] = n + 1
 		t.startDialConnForLocked(w)
@@ -1961,12 +1961,12 @@ func (t *Transport) decConnsPerHost(key connectMethodKey) {
 
 	t.connsPerHostMu.Lock()
 	defer t.connsPerHostMu.Unlock()
-	
+
 	// 修复并发问题：确保 connsPerHost map 已初始化
 	if t.connsPerHost == nil {
 		t.connsPerHost = make(map[connectMethodKey]int)
 	}
-	
+
 	n := t.connsPerHost[key]
 	if n == 0 {
 		// Shouldn't happen, but if it does, the counting is buggy and could
@@ -2021,21 +2021,21 @@ func (pconn *persistConn) addTLS(ctx context.Context, name string, trace *httptr
 		cfg.NextProtos = nil
 	}
 	plainConn := pconn.conn
-	
+
 	// ===== 我们原创的 TLS 指纹控制逻辑 =====
 	// 检查是否启用了自定义 TLS（支持简洁 API）
-	useCustomTLS := pconn.t.UseCustomTLS || 
-		pconn.t.JA3 != "" || 
+	useCustomTLS := pconn.t.UseCustomTLS ||
+		pconn.t.JA3 != "" ||
 		pconn.t.ClientHelloHexStream != "" ||
 		pconn.t.TLSFingerprint != nil
-		
+
 	var tlsConn interface {
 		net.Conn
 		HandshakeContext(context.Context) error
 		ConnectionState() tls.ConnectionState
 	}
 	var err error
-	
+
 	if useCustomTLS {
 		// 使用 utls 进行自定义 TLS 握手
 		tlsConn, err = pconn.createCustomTLSConn(plainConn, cfg)
@@ -3506,7 +3506,7 @@ func (pc *persistConn) createCustomTLSConn(plainConn net.Conn, cfg *tls.Config) 
 	utlsConfig := &tls.Config{
 		ServerName:         cfg.ServerName,
 		InsecureSkipVerify: cfg.InsecureSkipVerify,
-		RootCAs:           cfg.RootCAs,
+		RootCAs:            cfg.RootCAs,
 		ClientSessionCache: tls.NewLRUClientSessionCache(0),
 		// 修复 PSK 扩展问题：禁用 PSK 恢复以避免 panic
 		SessionTicketsDisabled: true,
@@ -3515,7 +3515,7 @@ func (pc *persistConn) createCustomTLSConn(plainConn net.Conn, cfg *tls.Config) 
 		// 隐藏空的 PSK 扩展
 		OmitEmptyPsk: true,
 	}
-	
+
 	// 关键修复：根据 JA3 内容决定是否禁用 SessionTickets
 	// 如果 JA3 包含 "0029"（SessionTicket 扩展），则不禁用
 	if pc.t.JA3 != "" && strings.Index(pc.t.JA3, "0029") == -1 {
@@ -3523,14 +3523,14 @@ func (pc *persistConn) createCustomTLSConn(plainConn net.Conn, cfg *tls.Config) 
 	} else {
 		utlsConfig.SessionTicketsDisabled = false
 	}
-	
+
 	// 创建 utls 客户端
 	tlsConn := tls.UClient(plainConn, utlsConfig, tls.HelloCustom)
-	
+
 	// 根据配置类型应用不同的指纹策略（支持简洁 API）
 	var spec *tls.ClientHelloSpec
 	var err error
-	
+
 	// 优先级：简洁 API > 高级 API > 默认
 	if pc.t.JA3 != "" {
 		// 简洁 API：直接使用 JA3
@@ -3557,21 +3557,21 @@ func (pc *persistConn) createCustomTLSConn(plainConn net.Conn, cfg *tls.Config) 
 			spec, err = pc.buildClientHelloFromPreset(fingerprint.PresetFingerprint)
 		}
 	}
-	
+
 	// 如果没有配置，使用默认
 	if spec == nil {
 		spec, err = pc.buildDefaultClientHello()
 	}
-	
+
 	if err != nil {
 		return nil, fmt.Errorf("构建 ClientHello 失败: %w", err)
 	}
-	
+
 	// 应用 ClientHello 配置
 	if err := tlsConn.ApplyPreset(spec); err != nil {
 		return nil, fmt.Errorf("应用 ClientHello 配置失败: %w", err)
 	}
-	
+
 	return tlsConn, nil
 }
 
@@ -3581,45 +3581,45 @@ func (pc *persistConn) buildClientHelloFromHexStream(hexStream string) (*tls.Cli
 	if hexStream == "" {
 		return nil, fmt.Errorf("十六进制流不能为空")
 	}
-	
+
 	// 检查是否包含 SessionTicket 扩展 (0029)
 	// 如果不包含，禁用 SessionTickets
 	hasSessionTicket := strings.Contains(hexStream, "0029")
-	
+
 	// 将十六进制字符串转换为字节数组
 	clientHelloHexStreamBytes := []byte(hexStream)
 	clientHelloBytes := make([]byte, hex.DecodedLen(len(clientHelloHexStreamBytes)))
-	
+
 	_, err := hex.Decode(clientHelloBytes, clientHelloHexStreamBytes)
 	if err != nil {
 		return nil, fmt.Errorf("十六进制解码失败: %w", err)
 	}
-	
+
 	// 使用 tls.Fingerprinter 解析 ClientHello
 	// 使用 utls 的 Fingerprinter 解析 ClientHello
 	fingerprinter := &tls.Fingerprinter{
-		AllowBluntMimicry: true,  // 允许直接模仿
+		AllowBluntMimicry: true, // 允许直接模仿
 		// 修复 PSK 问题：禁用 PSK 恢复以避免 panic
-		RealPSKResumption: false,  // 禁用 PSK 恢复
+		RealPSKResumption: false, // 禁用 PSK 恢复
 	}
-	
+
 	spec, err := fingerprinter.FingerprintClientHello(clientHelloBytes)
 	if err != nil {
 		return nil, fmt.Errorf("ClientHello 指纹解析失败: %w", err)
 	}
-	
+
 	// 根据 SessionTicket 扩展调整配置
 	if !hasSessionTicket {
 		// 如果没有 SessionTicket 扩展，我们需要调整配置
 		// 这里可以添加更多的配置调整逻辑
 	}
-	
+
 	// 修复 PSK 扩展问题：确保正确处理 PSK 扩展
 	spec = pc.fixPSKExtension(spec)
-	
+
 	// 应用 JA4+ 指纹控制
 	spec = pc.applyJA4Fingerprint(spec)
-	
+
 	return spec, nil
 }
 
@@ -3630,43 +3630,43 @@ func (pc *persistConn) buildClientHelloFromJA3(ja3, userAgent string, forceHTTP1
 	if len(parts) != 5 {
 		return nil, fmt.Errorf("无效的 JA3 格式，应为 5 个部分，实际为 %d 个", len(parts))
 	}
-	
+
 	version := parts[0]
 	ciphers := strings.Split(parts[1], "-")
 	extensions := strings.Split(parts[2], "-")
 	curves := strings.Split(parts[3], "-")
 	pointFormats := strings.Split(parts[4], "-")
-	
+
 	// 解析 TLS 版本
 	_, err := pc.parseTLSVersion(version)
 	if err != nil {
 		return nil, fmt.Errorf("解析 TLS 版本失败: %w", err)
 	}
-	
+
 	// 解析密码套件
 	cipherSuites, err := pc.parseCipherSuites(ciphers)
 	if err != nil {
 		return nil, fmt.Errorf("解析密码套件失败: %w", err)
 	}
-	
+
 	// 解析椭圆曲线
 	ellipticCurves, err := pc.parseEllipticCurves(curves)
 	if err != nil {
 		return nil, fmt.Errorf("解析椭圆曲线失败: %w", err)
 	}
-	
+
 	// 解析点格式
 	pointFormatsBytes, err := pc.parsePointFormats(pointFormats)
 	if err != nil {
 		return nil, fmt.Errorf("解析点格式失败: %w", err)
 	}
-	
+
 	// 构建 TLS 扩展
 	tlsExtensions, err := pc.buildTLSExtensions(extensions, userAgent, forceHTTP1, ellipticCurves, pointFormatsBytes)
 	if err != nil {
 		return nil, fmt.Errorf("构建 TLS 扩展失败: %w", err)
 	}
-	
+
 	// ===== 动态 KeyShare 数据处理 - 这是绕过反爬的核心技术 =====
 	if pc.t.TLSExtensions != nil && pc.t.TLSExtensions.KeyShareCurves != nil {
 		pc.processDynamicKeyShareData(pc.t.TLSExtensions.KeyShareCurves)
@@ -3676,7 +3676,7 @@ func (pc *persistConn) buildClientHelloFromJA3(ja3, userAgent string, forceHTTP1
 		// 简洁 API：处理从 JA3 构建的 KeyShare 扩展中的 GREASE 数据
 		pc.processDynamicKeyShareDataFromExtensions(tlsExtensions, userAgent)
 	}
-	
+
 	// 创建 ClientHelloSpec
 	// 不设置 TLSVersMin/TLSVersMax，让 utls 自动处理
 	// 这样可以更好地模拟真实浏览器的行为
@@ -3687,21 +3687,22 @@ func (pc *persistConn) buildClientHelloFromJA3(ja3, userAgent string, forceHTTP1
 		CompressionMethods: []byte{0}, // 标准压缩方法
 		Extensions:         tlsExtensions,
 	}
-	
+
 	// 修复 PSK 扩展问题：确保正确处理 PSK 扩展
 	spec = pc.fixPSKExtension(spec)
-	
+
 	// 应用 JA4+ 指纹控制
 	spec = pc.applyJA4Fingerprint(spec)
-	
+
 	return spec, nil
 }
 
 // buildClientHelloFromPreset 从预设指纹构建 ClientHello
 // 注意：预设指纹已在 github.com/vanling1111/tlshttp/presets 包中实现
 // 建议直接使用 presets 包：
-//   transport := presets.Chrome120Windows.NewTransport()
-//   或 presets.Firefox120.ApplyToTransport(transport)
+//
+//	transport := presets.Chrome120Windows.NewTransport()
+//	或 presets.Firefox120.ApplyToTransport(transport)
 func (pc *persistConn) buildClientHelloFromPreset(preset string) (*tls.ClientHelloSpec, error) {
 	// 此方法已被 presets 包取代
 	// presets 包提供了更完整的浏览器指纹配置，包括：
@@ -3718,10 +3719,10 @@ func (pc *persistConn) buildClientHelloFromPreset(preset string) (*tls.ClientHel
 func (pc *persistConn) buildDefaultClientHello() (*tls.ClientHelloSpec, error) {
 	// 默认策略：使用最常见的 Chrome 指纹
 	// 建议：直接使用 presets.Chrome120Windows 等预设
-	// 
+	//
 	// 如果确实需要默认指纹，可以这样使用：
 	//   transport := presets.Chrome120Windows.NewTransport()
-	// 
+	//
 	// 或者手动设置 JA3：
 	//   transport.JA3 = "771,4865-4866-4867-49195-49199..."
 	return nil, fmt.Errorf("请明确指定 JA3 或使用 presets 包，避免使用容易被检测的默认指纹")
@@ -3733,7 +3734,7 @@ func (pc *persistConn) fixPSKExtension(spec *tls.ClientHelloSpec) *tls.ClientHel
 	if spec == nil {
 		return spec
 	}
-	
+
 	// 检查是否包含 PSK 扩展 (扩展 ID 41)
 	hasPSKExtension := false
 	for _, ext := range spec.Extensions {
@@ -3744,7 +3745,7 @@ func (pc *persistConn) fixPSKExtension(spec *tls.ClientHelloSpec) *tls.ClientHel
 			break
 		}
 	}
-	
+
 	// 如果没有 PSK 扩展，添加一个空的 PSK 扩展以避免 panic
 	if !hasPSKExtension {
 		// 添加空的 PSK 扩展
@@ -3752,7 +3753,7 @@ func (pc *persistConn) fixPSKExtension(spec *tls.ClientHelloSpec) *tls.ClientHel
 		pskExt := &tls.UtlsPreSharedKeyExtension{}
 		spec.Extensions = append(spec.Extensions, pskExt)
 	}
-	
+
 	return spec
 }
 
@@ -3762,7 +3763,7 @@ func (pc *persistConn) applyJA4Fingerprint(spec *tls.ClientHelloSpec) *tls.Clien
 	if spec == nil || !pc.t.CustomJA4 {
 		return spec
 	}
-	
+
 	// JA4L (距离/位置) 指纹控制
 	// JA4L 格式: <TLS版本><扩展数量><第一个ALPN值长度><最后一个ALPN值长度>
 	// 例如: "t13d1715h2_c02f"
@@ -3780,8 +3781,8 @@ func (pc *persistConn) applyJA4Fingerprint(spec *tls.ClientHelloSpec) *tls.Clien
 		// - 参考 FoxIO 的 JA4 规范实现
 		// - 或提交 issue 请求支持
 	}
-	
-	// JA4X (X509 证书) 指纹控制  
+
+	// JA4X (X509 证书) 指纹控制
 	// JA4X 格式: <证书哈希>_<扩展哈希>
 	if pc.t.JA4X != "" {
 		// TODO: JA4X 实现
@@ -3796,7 +3797,7 @@ func (pc *persistConn) applyJA4Fingerprint(spec *tls.ClientHelloSpec) *tls.Clien
 		// - 使用自定义证书验证回调
 		// - 或等待社区提供参考实现
 	}
-	
+
 	return spec
 }
 
@@ -3815,51 +3816,51 @@ func (pc *persistConn) parseTLSVersion(version string) (uint16, error) {
 // 支持 Chrome GREASE 功能，改进 JA3 解析准确性
 func (pc *persistConn) parseCipherSuites(ciphers []string) ([]uint16, error) {
 	var suites []uint16
-	
+
 	// Chrome GREASE 支持（支持简洁 API）
 	useGREASE := (pc.t.TLSFingerprint != nil && pc.t.TLSFingerprint.CustomExtensions != nil && !pc.t.TLSFingerprint.CustomExtensions.NotUsedGREASE) ||
 		(pc.t.TLSExtensions != nil && !pc.t.TLSExtensions.NotUsedGREASE)
-		
+
 	if useGREASE {
 		suites = append(suites, tls.GREASE_PLACEHOLDER)
 	}
-	
+
 	// 验证密码套件列表不为空
 	if len(ciphers) == 0 {
 		return nil, fmt.Errorf("密码套件列表不能为空")
 	}
-	
+
 	for i, cipher := range ciphers {
 		if cipher == "" {
 			continue
 		}
-		
+
 		// 改进的密码套件验证
 		cipherID, err := strconv.ParseUint(cipher, 10, 16)
 		if err != nil {
 			return nil, fmt.Errorf("无效的密码套件 '%s' (位置 %d): %w", cipher, i, err)
 		}
-		
+
 		// 验证密码套件 ID 的有效范围
 		if cipherID == 0 || cipherID > 0xFFFF {
 			return nil, fmt.Errorf("密码套件 ID '%d' 超出有效范围 (1-65535)", cipherID)
 		}
-		
+
 		// 检查重复的密码套件
 		for _, existingSuite := range suites {
 			if existingSuite == uint16(cipherID) {
 				return nil, fmt.Errorf("重复的密码套件 ID: %d", cipherID)
 			}
 		}
-		
+
 		suites = append(suites, uint16(cipherID))
 	}
-	
+
 	// 确保至少有一个有效的密码套件
 	if len(suites) == 0 {
 		return nil, fmt.Errorf("至少需要一个有效的密码套件")
 	}
-	
+
 	return suites, nil
 }
 
@@ -3867,15 +3868,15 @@ func (pc *persistConn) parseCipherSuites(ciphers []string) ([]uint16, error) {
 // 支持 Chrome GREASE 功能
 func (pc *persistConn) parseEllipticCurves(curves []string) ([]tls.CurveID, error) {
 	var curveIDs []tls.CurveID
-	
+
 	// Chrome GREASE 支持（支持简洁 API）
 	useGREASE := (pc.t.TLSFingerprint != nil && pc.t.TLSFingerprint.CustomExtensions != nil && !pc.t.TLSFingerprint.CustomExtensions.NotUsedGREASE) ||
 		(pc.t.TLSExtensions != nil && !pc.t.TLSExtensions.NotUsedGREASE)
-		
+
 	if useGREASE {
 		curveIDs = append(curveIDs, tls.CurveID(tls.GREASE_PLACEHOLDER))
 	}
-	
+
 	for _, curve := range curves {
 		if curve == "" {
 			continue
@@ -3886,14 +3887,14 @@ func (pc *persistConn) parseEllipticCurves(curves []string) ([]tls.CurveID, erro
 		}
 		curveIDs = append(curveIDs, tls.CurveID(curveID))
 	}
-	
+
 	return curveIDs, nil
 }
 
 // parsePointFormats 解析点格式
 func (pc *persistConn) parsePointFormats(formats []string) ([]byte, error) {
 	var formatBytes []byte
-	
+
 	for _, format := range formats {
 		if format == "" {
 			continue
@@ -3904,34 +3905,34 @@ func (pc *persistConn) parsePointFormats(formats []string) ([]byte, error) {
 		}
 		formatBytes = append(formatBytes, byte(formatID))
 	}
-	
+
 	return formatBytes, nil
 }
 
 // buildTLSExtensions 构建 TLS 扩展
 func (pc *persistConn) buildTLSExtensions(extensions []string, userAgent string, forceHTTP1 bool, curves []tls.CurveID, pointFormats []byte) ([]tls.TLSExtension, error) {
 	var tlsExtensions []tls.TLSExtension
-	
+
 	// 获取扩展映射表
 	extensionMap := pc.getExtensionMap()
-	
+
 	// 解析用户代理类型
 	browserType := pc.parseBrowserType(userAgent)
-	
+
 	// 处理 GREASE 扩展（Chrome 特有，支持简洁 API）
 	useGREASE := (pc.t.TLSFingerprint != nil && pc.t.TLSFingerprint.CustomExtensions != nil && !pc.t.TLSFingerprint.CustomExtensions.NotUsedGREASE) ||
 		(pc.t.TLSExtensions != nil && !pc.t.TLSExtensions.NotUsedGREASE)
-		
+
 	if browserType == "chrome" && useGREASE {
 		tlsExtensions = append(tlsExtensions, &tls.UtlsGREASEExtension{})
 	}
-	
+
 	// 处理每个扩展
 	for i, extID := range extensions {
 		if extID == "" {
 			continue
 		}
-		
+
 		// 检查是否为特殊扩展
 		if extID == "10" {
 			// Supported Curves 扩展
@@ -3949,13 +3950,13 @@ func (pc *persistConn) buildTLSExtensions(extensions []string, userAgent string,
 			if forceHTTP1 {
 				alpnProtocols = []string{"http/1.1"}
 			}
-			
+
 			// 检查是否使用自定义 ALPN 协议
 			if pc.t.CustomALPN && len(pc.t.ALPNProtocols) > 0 {
 				alpnProtocols = make([]string, len(pc.t.ALPNProtocols))
 				copy(alpnProtocols, pc.t.ALPNProtocols)
 			}
-			
+
 			tlsExtensions = append(tlsExtensions, &tls.ALPNExtension{
 				AlpnProtocols: alpnProtocols,
 			})
@@ -3974,7 +3975,7 @@ func (pc *persistConn) buildTLSExtensions(extensions []string, userAgent string,
 				})
 			}
 		}
-		
+
 		// Chrome 特殊处理：在特定扩展后添加 GREASE（支持简洁 API）
 		if browserType == "chrome" && useGREASE {
 			if (extID == "41" || extID == "21") && i == len(extensions)-1 {
@@ -3982,7 +3983,7 @@ func (pc *persistConn) buildTLSExtensions(extensions []string, userAgent string,
 			}
 		}
 	}
-	
+
 	// Chrome 特殊处理：如果最后一个扩展不是 21 或 41，添加 GREASE（支持简洁 API）
 	if browserType == "chrome" && useGREASE {
 		if len(extensions) > 0 {
@@ -3992,13 +3993,13 @@ func (pc *persistConn) buildTLSExtensions(extensions []string, userAgent string,
 			}
 		}
 	}
-	
+
 	// 扩展随机化支持（支持简洁 API）
 	useRandomization := pc.t.RandomizeFingerprint || pc.t.RandomJA3
 	if useRandomization {
 		tlsExtensions = tls.ShuffleChromeTLSExtensions(tlsExtensions)
 	}
-	
+
 	return tlsExtensions, nil
 }
 
@@ -4008,24 +4009,24 @@ func parseUserAgent(userAgent string) string {
 	if userAgent == "" {
 		return "chrome" // 默认使用 chrome
 	}
-	
+
 	userAgentLower := strings.ToLower(userAgent)
-	
+
 	// 检测 Chrome 浏览器
 	if strings.Contains(userAgentLower, "chrome") {
 		return "chrome"
 	}
-	
+
 	// 检测 Safari (AppleWebKit 但没有 Chrome)
 	if strings.Contains(userAgentLower, "applewebkit") && !strings.Contains(userAgentLower, "chrome") {
 		return "chrome" // Safari 也使用 chrome 指纹
 	}
-	
+
 	// 检测 Firefox
 	if strings.Contains(userAgentLower, "firefox") {
 		return "firefox"
 	}
-	
+
 	// 默认使用 chrome
 	return "chrome"
 }
@@ -4036,11 +4037,11 @@ func (pc *persistConn) processDynamicKeyShareData(keyShareCurves *tls.KeyShareEx
 	if keyShareCurves == nil || keyShareCurves.KeyShares == nil {
 		return
 	}
-	
+
 	// 动态处理每个 KeyShare
 	for i := range keyShareCurves.KeyShares {
 		v := keyShareCurves.KeyShares[i].Group
-		
+
 		// 检测 GREASE 占位符：((v >> 8) == v&0xff) && v&0xf == 0xa
 		// 这是 Chrome 浏览器的 GREASE 特征
 		if ((v >> 8) == v&0xff) && v&0xf == 0xa {
@@ -4060,14 +4061,14 @@ func (pc *persistConn) processDynamicKeyShareDataFromExtensions(extensions []tls
 	if !strings.Contains(strings.ToLower(userAgent), "chrome") {
 		return
 	}
-	
+
 	// 查找 KeyShare 扩展 (ID: 51)
 	for _, ext := range extensions {
 		if keyShareExt, ok := ext.(*tls.KeyShareExtension); ok {
 			// 处理 KeyShare 中的 GREASE 数据
 			for i := range keyShareExt.KeyShares {
 				v := keyShareExt.KeyShares[i].Group
-				
+
 				// 检测 GREASE 占位符：((v >> 8) == v&0xff) && v&0xf == 0xa
 				if ((v >> 8) == v&0xff) && v&0xf == 0xa {
 					// GREASE 占位符：设置为空数据
@@ -4088,22 +4089,22 @@ func (ext *TLSExtensionsConfig) StringToSpec(ja3, userAgent string, forceHTTP1, 
 	if ext == nil {
 		ext = &TLSExtensionsConfig{}
 	}
-	
+
 	// 解析用户代理
 	parsedUserAgent := parseUserAgent(userAgent)
-	
+
 	// 解析 JA3 字符串
 	tokens := strings.Split(ja3, ",")
 	if len(tokens) != 5 {
 		return nil, fmt.Errorf("无效的 JA3 格式，应为 5 个部分，实际为 %d 个", len(tokens))
 	}
-	
+
 	_ = tokens[0] // version - 不使用，让 utls 自动处理
 	ciphers := strings.Split(tokens[1], "-")
 	extensions := strings.Split(tokens[2], "-")
 	curves := strings.Split(tokens[3], "-")
 	pointFormats := strings.Split(tokens[4], "-")
-	
+
 	// 处理空曲线和点格式
 	if len(curves) == 1 && curves[0] == "" {
 		curves = []string{}
@@ -4111,25 +4112,25 @@ func (ext *TLSExtensionsConfig) StringToSpec(ja3, userAgent string, forceHTTP1, 
 	if len(pointFormats) == 1 && pointFormats[0] == "" {
 		pointFormats = []string{}
 	}
-	
+
 	// 获取扩展映射表
 	extMap := getCompleteExtensionMap()
-	
+
 	// 解析椭圆曲线
 	var targetCurves []tls.CurveID
-	
+
 	// Chrome GREASE 处理 - 核心反爬技术
 	if parsedUserAgent == "chrome" && !ext.NotUsedGREASE {
 		// 添加 GREASE 占位符
 		targetCurves = append(targetCurves, tls.CurveID(tls.GREASE_PLACEHOLDER))
-		
+
 		// 在 SupportedVersions 扩展中添加 GREASE
 		if supportedVersionsExt, ok := extMap["43"]; ok {
 			if supportedVersions, ok := supportedVersionsExt.(*tls.SupportedVersionsExtension); ok {
 				supportedVersions.Versions = append([]uint16{tls.GREASE_PLACEHOLDER}, supportedVersions.Versions...)
 			}
 		}
-		
+
 		// 在 KeyShare 扩展中添加 GREASE
 		if keyShareExt, ok := extMap["51"]; ok {
 			if keyShare, ok := keyShareExt.(*tls.KeyShareExtension); ok {
@@ -4144,7 +4145,7 @@ func (ext *TLSExtensionsConfig) StringToSpec(ja3, userAgent string, forceHTTP1, 
 			}
 		}
 	}
-	
+
 	// 解析 JA3 中的曲线
 	for _, c := range curves {
 		cid, err := strconv.ParseUint(c, 10, 16)
@@ -4154,7 +4155,7 @@ func (ext *TLSExtensionsConfig) StringToSpec(ja3, userAgent string, forceHTTP1, 
 		targetCurves = append(targetCurves, tls.CurveID(cid))
 	}
 	extMap["10"] = &tls.SupportedCurvesExtension{Curves: targetCurves}
-	
+
 	// 解析点格式
 	var targetPointFormats []byte
 	for _, p := range pointFormats {
@@ -4165,14 +4166,14 @@ func (ext *TLSExtensionsConfig) StringToSpec(ja3, userAgent string, forceHTTP1, 
 		targetPointFormats = append(targetPointFormats, byte(pid))
 	}
 	extMap["11"] = &tls.SupportedPointsExtension{SupportedPoints: targetPointFormats}
-	
+
 	// 强制 HTTP/1.1 处理
 	if forceHTTP1 {
 		extMap["16"] = &tls.ALPNExtension{
 			AlpnProtocols: []string{"http/1.1"},
 		}
 	}
-	
+
 	// 自定义 TLS 扩展处理
 	if ext.SupportedSignatureAlgorithms != nil {
 		extMap["13"] = ext.SupportedSignatureAlgorithms
@@ -4198,30 +4199,30 @@ func (ext *TLSExtensionsConfig) StringToSpec(ja3, userAgent string, forceHTTP1, 
 	if ext.KeyShareCurves != nil {
 		extMap["51"] = ext.KeyShareCurves
 	}
-	
+
 	// 构建扩展列表
 	var exts []tls.TLSExtension
-	
+
 	// Chrome GREASE 扩展处理
 	if parsedUserAgent == "chrome" && !ext.NotUsedGREASE {
 		exts = append(exts, &tls.UtlsGREASEExtension{})
 	}
-	
+
 	// 处理 JA3 中的扩展
 	for i, e := range extensions {
 		te, ok := extMap[e]
 		if !ok {
 			return nil, fmt.Errorf("不支持的扩展: %s", e)
 		}
-		
+
 		// Chrome 特殊处理：在特定扩展后添加 GREASE
 		if i == len(extensions)-1 && (e == "41" || e == "21") && parsedUserAgent == "chrome" && !ext.NotUsedGREASE {
 			exts = append(exts, &tls.UtlsGREASEExtension{})
 		}
-		
+
 		exts = append(exts, te)
 	}
-	
+
 	// Chrome 特殊处理：如果最后一个扩展不是 21 或 41，添加 GREASE
 	if parsedUserAgent == "chrome" && !ext.NotUsedGREASE {
 		if len(extensions) > 0 {
@@ -4231,15 +4232,15 @@ func (ext *TLSExtensionsConfig) StringToSpec(ja3, userAgent string, forceHTTP1, 
 			}
 		}
 	}
-	
+
 	// 构建密码套件
 	var suites []uint16
-	
+
 	// Chrome GREASE 处理
 	if parsedUserAgent == "chrome" && !ext.NotUsedGREASE {
 		suites = append(suites, tls.GREASE_PLACEHOLDER)
 	}
-	
+
 	// 解析 JA3 中的密码套件
 	for _, c := range ciphers {
 		cid, err := strconv.ParseUint(c, 10, 16)
@@ -4248,12 +4249,12 @@ func (ext *TLSExtensionsConfig) StringToSpec(ja3, userAgent string, forceHTTP1, 
 		}
 		suites = append(suites, uint16(cid))
 	}
-	
+
 	// 随机化扩展
 	if randomJA3 {
 		exts = tls.ShuffleChromeTLSExtensions(exts)
 	}
-	
+
 	// 创建 ClientHelloSpec
 	return &tls.ClientHelloSpec{
 		CipherSuites:       suites,
@@ -4273,9 +4274,9 @@ func (pc *persistConn) parseBrowserType(userAgent string) string {
 	if userAgent == "" {
 		return "chrome" // 默认使用 Chrome
 	}
-	
+
 	userAgentLower := strings.ToLower(userAgent)
-	
+
 	if strings.Contains(userAgentLower, "chrome") || strings.Contains(userAgentLower, "applewebkit") {
 		return "chrome"
 	} else if strings.Contains(userAgentLower, "firefox") {
@@ -4285,7 +4286,7 @@ func (pc *persistConn) parseBrowserType(userAgent string) string {
 	} else if strings.Contains(userAgentLower, "edge") {
 		return "edge"
 	}
-	
+
 	return "chrome" // 默认
 }
 
@@ -4297,7 +4298,7 @@ func (ext *TLSExtensionsConfig) Clone() (*TLSExtensionsConfig, error) {
 	if ext == nil {
 		return nil, nil
 	}
-	
+
 	// 使用 CBOR 进行深度序列化和反序列化
 	data, err := cbor.Marshal(ext, cbor.EncOptions{})
 	if err != nil {
@@ -4308,7 +4309,7 @@ func (ext *TLSExtensionsConfig) Clone() (*TLSExtensionsConfig, error) {
 	if err := cbor.Unmarshal(data, &clone); err != nil {
 		return nil, fmt.Errorf("CBOR 反序列化失败: %w", err)
 	}
-	
+
 	return clone, nil
 }
 
@@ -4318,7 +4319,7 @@ func (cfg *TLSFingerprintConfig) Clone() (*TLSFingerprintConfig, error) {
 	if cfg == nil {
 		return nil, nil
 	}
-	
+
 	// 使用 CBOR 进行深度序列化和反序列化
 	data, err := cbor.Marshal(cfg, cbor.EncOptions{})
 	if err != nil {
@@ -4329,7 +4330,7 @@ func (cfg *TLSFingerprintConfig) Clone() (*TLSFingerprintConfig, error) {
 	if err := cbor.Unmarshal(data, &clone); err != nil {
 		return nil, fmt.Errorf("CBOR 反序列化失败: %w", err)
 	}
-	
+
 	return clone, nil
 }
 
@@ -4342,11 +4343,11 @@ func getCompleteExtensionMap() map[string]tls.TLSExtension {
 		// 基础扩展
 		"0": &tls.SNIExtension{},
 		"5": &tls.StatusRequestExtension{},
-		
+
 		// 椭圆曲线和点格式 (动态设置)
 		// "10": &tls.SupportedCurvesExtension{...} // 动态设置
 		// "11": &tls.SupportedPointsExtension{...} // 动态设置
-		
+
 		// 签名算法
 		"13": &tls.SignatureAlgorithmsExtension{
 			SupportedSignatureAlgorithms: []tls.SignatureScheme{
@@ -4363,40 +4364,40 @@ func getCompleteExtensionMap() map[string]tls.TLSExtension {
 				tls.PKCS1WithSHA1,
 			},
 		},
-		
+
 		// ALPN 扩展
 		"16": &tls.ALPNExtension{
 			AlpnProtocols: []string{"h2", "http/1.1"},
 		},
-		
+
 		// 状态请求 v2
 		"17": &tls.GenericExtension{Id: 17},
-		
+
 		// 证书透明度
 		"18": &tls.SCTExtension{},
-		
+
 		// Chrome 填充扩展
 		"21": &tls.UtlsPaddingExtension{GetPaddingLen: tls.BoringPaddingStyle},
-		
+
 		// 加密后 MAC
 		"22": &tls.GenericExtension{Id: 22},
-		
+
 		// 扩展主密钥
 		"23": &tls.ExtendedMasterSecretExtension{},
-		
+
 		// 令牌绑定
 		"24": &tls.FakeTokenBindingExtension{},
-		
+
 		// 证书压缩
 		"27": &tls.UtlsCompressCertExtension{
 			Algorithms: []tls.CertCompressionAlgo{tls.CertCompressionBrotli},
 		},
-		
+
 		// 记录大小限制
 		"28": &tls.FakeRecordSizeLimitExtension{
 			Limit: 0x4001,
 		},
-		
+
 		// 委托凭证
 		"34": &tls.DelegatedCredentialsExtension{
 			SupportedSignatureAlgorithms: []tls.SignatureScheme{
@@ -4406,30 +4407,30 @@ func getCompleteExtensionMap() map[string]tls.TLSExtension {
 				tls.ECDSAWithSHA1,
 			},
 		},
-		
+
 		// 会话票据
 		"35": &tls.SessionTicketExtension{},
-		
+
 		// 预共享密钥
 		"41": &tls.UtlsPreSharedKeyExtension{},
-		
+
 		// 支持的版本
 		"43": &tls.SupportedVersionsExtension{Versions: []uint16{
 			tls.VersionTLS13,
 			tls.VersionTLS12,
 		}},
-		
+
 		// Cookie 扩展
 		"44": &tls.CookieExtension{},
-		
+
 		// PSK 密钥交换模式
 		"45": &tls.PSKKeyExchangeModesExtension{Modes: []uint8{
 			tls.PskModeDHE,
 		}},
-		
+
 		// 握手后认证
 		"49": &tls.GenericExtension{Id: 49},
-		
+
 		// 证书签名算法
 		"50": &tls.SignatureAlgorithmsCertExtension{
 			SupportedSignatureAlgorithms: []tls.SignatureScheme{
@@ -4446,37 +4447,37 @@ func getCompleteExtensionMap() map[string]tls.TLSExtension {
 				tls.PKCS1WithSHA1,
 			},
 		},
-		
+
 		// 密钥共享
 		"51": &tls.KeyShareExtension{KeyShares: []tls.KeyShare{
 			{Group: tls.X25519},
 			// 注意: CurveP384 有已知 bug，暂时不包含
 		}},
-		
+
 		// QUIC 传输参数
 		"57": &tls.QUICTransportParametersExtension{},
-		
+
 		// NPN 扩展
 		"13172": &tls.NPNExtension{},
-		
+
 		// HTTP/3 应用设置
 		"17513": &tls.ApplicationSettingsExtension{
 			SupportedProtocols: []string{"h2"},
 		},
-		
+
 		// HTTP/3 应用设置 (新版本)
 		"17613": &tls.ApplicationSettingsExtensionNew{
 			SupportedProtocols: []string{"h2"},
 		},
-		
+
 		// 自定义扩展
 		"30032": &tls.GenericExtension{Id: 0x7550, Data: []byte{0}},
-		
+
 		// 重新协商信息
 		"65281": &tls.RenegotiationInfoExtension{
 			Renegotiation: tls.RenegotiateOnceAsClient,
 		},
-		
+
 		// Chrome GREASE ECH
 		"65037": tls.BoringGREASEECH(),
 	}
